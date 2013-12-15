@@ -1,13 +1,177 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+//#include "polje.h"
+#include "pokazivac.h"
+using namespace std;
+char ime_musko[18][15]= {"Ivan","Tihomir","Zeljko","Lovro","Luka","Marko","Kreso","Vedran","Mario","Darko","Nikola","Matija","Daniel","Mirko","Tomislav","Sasa","Branimir","Ivica"};
+char ime_zensko[18][15]= {"Maja","Jelena","Viktorija","Morena","Lea","Martina","Veronika","Andreja","Petra","Kristina","Helena","Ivana","Danijela","Lorena","Iva","Doroteja","Antonija","Tea"};
+char prezime[18][15]={"Jukic","Topic","Basic","Juric","Muslim","Obradovic","Filipovic","Josipovic","Sanader","Milanovic","Linic","Bauk","Pusic","Grgic","Maric","Ivic","Rozga","Jakopovic"};
+char spola[2][2]={"m","z"};
+pacijent *zapisi;
+int generiraj(){
+	int N;
+	cout<<"Upisite koliko zelite unjeti N: ";
+	cin>>N;
+	zapisi=new pacijent[N];
+	srand(time(0));
+	for(int i=0;i<N;i++){
+		zapisi[i].ai=50+rand()%250;
+		zapisi[i].bi=50+rand()%250;
+		zapisi[i].ci=1+rand()%5;
+		zapisi[i].di=1+rand()%4;
+		do{
+		zapisi[i].ei=1+rand()%5;
+	}while((zapisi[i].ci==1 && zapisi[i].ei==1) || (zapisi[i].ci==3 && zapisi[i].ei==5) || (zapisi[i].ci==3 && zapisi[i].ei==2));
+	}
+for(int i=0;i<N;i++){
+		cout<<zapisi[i].ai<<"\t"<<zapisi[i].bi<<"\t"<<zapisi[i].ci<<"\t"<<zapisi[i].di<<"\t"<<zapisi[i].ei<<endl;
+	}
+	return N;
+}
+void unos(int N,red *Q){
+	pacijent novi;
+	int r;
+	for(int i=0;i<N;i++){
+		for(int j=0;j<3;j++){
+			novi.ai=zapisi[i].ai;
+			novi.bi=zapisi[i].bi;
+			novi.ci=zapisi[i].ci;
+			novi.di=zapisi[i].di;
+			novi.ei=zapisi[i].ei;
+			if(novi.ci==3)r=1;
+			else  r=rand()%2;
+			strcpy(novi.spol,spola[r]);
+			int ime,prez;
+			ime=rand()%18;
+			prez=rand()%18;
+			if(strcmp(novi.spol,"m")==0){
+				strcpy(novi.ime,ime_musko[ime]);
+				strcpy(novi.prezime,prezime[prez]);
+			}
+			else {
+				strcpy(novi.ime,ime_zensko[ime]);
+				strcpy(novi.prezime,prezime[prez]);
+			}
+			if(novi.ci==4){
+			novi.dan=1+rand()%31;
+			novi.mjesec=1+rand()%12;
+			novi.godina=2007+rand()%7;
+			}
+			else{
+			novi.dan=1+rand()%31;
+			novi.mjesec=1+rand()%12;
+			novi.godina=1930+rand()%63;
+		}
+		cout<<"Spol: "<<novi.spol<<endl;
+		cout<<"Ime: "<<novi.ime<<" "<<"prezime: "<<novi.prezime<<endl;
+		cout<<"Datum rodjena: "<<novi.dan<<"."<<novi.mjesec<<"."<<novi.godina<<endl;
+		EnQueueQ(novi, Q);
+		cout<<endl;
+		}
+}
+cout<<"========================================================================"<<endl;
+		cout<<"Pacijentice starije od 25 godina koje čekaju na pregled kod oftalmologa."<<endl;
+		pacijent a;
+		red *pomocni=InitQ(pomocni);
+		while(IsEmptyQ(Q)==false){
+			a=FrontQ(Q);
+			DeQueueQ(Q);
+			EnQueueQ(a,pomocni);
+		}
+		while(IsEmptyQ(pomocni)==false){
+		a=FrontQ(pomocni);
+		DeQueueQ(pomocni);
+		EnQueueQ(a, Q);
+		if(a.godina>1987 && a.ci==2){
+			if(strcmp(a.spol,"z")==0){
+				cout<<"IME: "<<a.ime<<"\t"<<"PREZIME: "<<a.prezime<<endl;
+				cout<<"DATUM RODJENA: "<<a.dan<<"."<<a.mjesec<<"."<<a.godina<<endl; 
+				cout<<endl;
+			}
+		}
+	}
+	delete pomocni;
+}
+int ukupno=0;
+void treci(red *Q){
+	int b=0;
+	cout<<"=============================================================================="<<endl;
+	cout<<"SVI INVALIDI STARIJI OD 50 GODINA POSJEUJU LIJECNIKA OBITELJSKE MEDICINE I TRAZE PREVIJANJE"<<endl;
+		pacijent a;
+		red *pomocni=InitQ(pomocni);
+		while(IsEmptyQ(Q)==false){
+			a=FrontQ(Q);
+			DeQueueQ(Q);
+			EnQueueQ(a,pomocni);
+		}
+	while(IsEmptyQ(pomocni)==false){
+		a=FrontQ(pomocni);
+		DeQueueQ(pomocni);
+		if(a.godina<1963 && a.ci==2){
+			if(a.ei==1 && a.di==2){
+				b++;
+			}
+		}
+		else {
+				cout<<"IME: "<<a.ime<<"\t"<<"PREZIME: "<<a.prezime<<endl;
+				cout<<"DATUM RODJENA: "<<a.dan<<"."<<a.mjesec<<"."<<a.godina<<endl; 
+				cout<<endl;
+				EnQueueQ(a, Q);
+				ukupno++;
+		}
+		}
+	cout<<"Ukupno ima "<<b<<" osoba koji su napustili red."<<endl;
+	cout<<"Ukupno ima: "<<ukupno<<" koji su ostali."<<endl;
+	}
+void ispis(red *pomocni){
+		pacijent a;
+		while(IsEmptyQ(pomocni)==false){
+		a=FrontQ(pomocni);
+		DeQueueQ(pomocni);
+				cout<<"IME: "<<a.ime<<"\t"<<"PREZIME: "<<a.prezime<<endl;
+				cout<<"DATUM RODJENA: "<<a.dan<<"."<<a.mjesec<<"."<<a.godina<<endl; 
+				cout<<endl;
+			}
+}
+void rekurzija(red *Q){
+	int c=0;
+	int broj=ukupno;
+	red *pomocni=InitQ(pomocni);
+	if(IsEmptyQ(Q)==true) {
+		return;
+	}
+	pacijent a=FrontQ(Q);
+	DeQueueQ(Q);
+	rekurzija(Q);
+	if(ukupno>(broj*0.7) ) {
+		ukupno--;
+		EnQueueQ(a, pomocni);
+	}else{
+		EnQueueQ(a, Q);
+	}
+	ispis(pomocni);
+}
+int main(){
+	int a;
+	red *Q = InitQ(Q);
+	int izbor;
+	do{
+		cout<<"==============================="<<endl;
+		cout<<"=========IZBORNIK=============="<<endl;
+		cout<<"1.Generiranje N petorki."<<endl;
+		cout<<"2.Dodavanje osnovnih podataka o pacijentima u red."<<endl;
+		cout<<"3.Brisanje svih invalida starijih od 50 godina koji su dosli lijecniku obiteljske medicine na previjanje."<<endl;
+		cout<<"4.Brzi red."<<endl;
+		cin>>izbor;
+		switch(izbor){
+			case 1:a=generiraj();break;
+			case 2:unos(a,Q);break;
+			case 3:treci(Q);break;
+			case 4:rekurzija(Q);cout<<"----------"<<endl;
+			ispis(Q);break;
+		}
+	}while(izbor!=9);
+	return 0;
+}
